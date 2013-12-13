@@ -64,7 +64,22 @@ def basicFeatureExtractorFace(datum):
             else:
                 features[(x,y)] = 0
     return features
-
+def pixArray(datum, x,y, marked):
+    marked[x][y] = 1
+    next = []
+    napp = next.append
+    if(x != 0):
+        napp((x-1, y))
+    if(x !=  DIGIT_DATUM_WIDTH - 1):
+        napp((x+1, y))
+    if(y != 0):
+        napp((x, y-1))
+    if(y !=  DIGIT_DATUM_HEIGHT - 1):
+        napp((x, y+1))
+    for (px, py) in next:
+      if(datum.getPixel(px,py) == 0 and marked[px][py] == 0):
+        marked = pixArray(datum, px, py, marked)
+    return marked
 def enhancedFeatureExtractorDigit(datum):
     """
     Your feature extraction playground.
@@ -79,8 +94,18 @@ def enhancedFeatureExtractorDigit(datum):
     features =  basicFeatureExtractorDigit(datum)
 
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
-
+    regions = 0
+    marked = [[0 for j in range(DIGIT_DATUM_HEIGHT)] for i in range(DIGIT_DATUM_WIDTH)]
+    for x in range(DIGIT_DATUM_WIDTH):
+        for y in range(DIGIT_DATUM_HEIGHT):
+            if(datum.getPixel(x,y) == 0 and marked[x][y] == 0):
+                marked = pixArray(datum, x, y, marked)
+                regions += 1
+    features[1] = 0
+    features[2] = 0
+    features[3] = 0
+    features[regions] = 1
+    #features[0] = 0
     return features
 
 
