@@ -55,7 +55,18 @@ class PerceptronClassifier:
         for iteration in range(self.max_iterations):
             print "Starting iteration ", iteration, "..."
             for i in range(len(trainingData)):
-                "*** YOUR CODE HERE ***"
+                # print self.features
+                # print "**************************"
+                # print self.weights
+                update = util.Counter()
+                for each in self.legalLabels:
+                    update[each] = self.weights[each]*trainingData[i]
+                next = update.argMax()
+                if(next == trainingLabels[i]):
+                    continue
+                self.weights[trainingLabels[i]] = self.weights[trainingLabels[i]]+trainingData[i]
+                self.weights[next] = self.weights[next]-trainingData[i]
+                continue
                 util.raiseNotDefined()
 
     def classify(self, data ):
@@ -80,7 +91,9 @@ class PerceptronClassifier:
         """
         featuresWeights = []
 
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        sorted_weights = self.weights[label].sortedKeys()
+        featuresWeights = sorted_weights[0:100]
+        #"*** YOUR CODE HERE ***"
+        #util.raiseNotDefined()
 
         return featuresWeights
